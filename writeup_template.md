@@ -1,8 +1,6 @@
-# **Traffic Sign Recognition** 
+# **Traffic Sign Recognition**
 
 ## Writeup
-
-### You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
 
 ---
 
@@ -19,43 +17,63 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/visualization.jpg "Visualization"
-[image2]: ./examples/grayscale.jpg "Grayscaling"
-[image3]: ./examples/random_noise.jpg "Random Noise"
-[image4]: ./examples/placeholder.png "Traffic Sign 1"
-[image5]: ./examples/placeholder.png "Traffic Sign 2"
-[image6]: ./examples/placeholder.png "Traffic Sign 3"
-[image7]: ./examples/placeholder.png "Traffic Sign 4"
-[image8]: ./examples/placeholder.png "Traffic Sign 5"
+[image1]: ./images/training_counts.png "Training Label Counts"
+[image2]: ./images/validation_counts.png "Validation Label Counts"
+[image3]: ./images/test_counts.png "Test Label Counts"
+[image4]: ./images/training_samples.png "Test Label Counts"
+[image5]: ./images/validation_samples.png "Test Label Counts"
+[image6]: ./images/test_samples.png "Test Label Counts"
+[image7]: ./examples/traffic1.jpg "Traffic Sign 1"
+[image8]: ./examples/traffic2.jpg "Traffic Sign 2"
+[image9]: ./examples/traffic3.jpg "Traffic Sign 3"
+[image10]: ./examples/traffic4.jpg "Traffic Sign 4"
+[image11]: ./examples/traffic5.jpg "Traffic Sign 5"
 
 ## Rubric Points
-### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
+### Here I will consider the
+[rubric points](https://review.udacity.com/#!/rubrics/481/view) individually
+and describe how I addressed each point in my implementation.  
 
 ---
 ### Writeup / README
 
-#### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one. You can submit your writeup as markdown or pdf. You can use this template as a guide for writing the report. The submission includes the project code.
+#### 1. Provide a Writeup / README that includes all the rubric points and
+how you addressed each one. You can submit your writeup as markdown or pdf.
+You can use this template as a guide for writing the report.
+The submission includes the project code.
 
-You're reading it! and here is a link to my [project code](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb)
+You're reading it! and here is a link to my [project code](https://github.com/itprov/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb)
 
 ### Data Set Summary & Exploration
 
-#### 1. Provide a basic summary of the data set. In the code, the analysis should be done using python, numpy and/or pandas methods rather than hardcoding results manually.
+#### 1. Provide a basic summary of the data set. In the code, the analysis
+should be done using python, numpy and/or pandas methods rather than hardcoding
+results manually.
 
 I used the pandas library to calculate summary statistics of the traffic
 signs data set:
 
-* The size of training set is ?
-* The size of the validation set is ?
-* The size of test set is ?
-* The shape of a traffic sign image is ?
-* The number of unique classes/labels in the data set is ?
+* The size of training set is 34799
+* The size of the validation set is 4410
+* The size of test set is 12630
+* The shape of a traffic sign image is (32, 32, 3)
+* The number of unique classes/labels in the data set is 43
 
 #### 2. Include an exploratory visualization of the dataset.
 
-Here is an exploratory visualization of the data set. It is a bar chart showing how the data ...
+Here is an exploratory visualization of the data set.
+##### A. Bar charts showing counts of labels belonging to each class,
+in Training, Validation, and Test datasets
 
-![alt text][image1]
+![Training Label Counts][image1]
+![Validation Label Counts][image2]
+![Test Label Counts][image3]
+
+##### B. Random samples selected from Training, Validation, and Test datasets
+
+![Training Samples][image4]
+![Validation Samples][image5]
+![Test Samples][image6]
 
 ### Design and Test a Model Architecture
 
@@ -69,24 +87,24 @@ Here is an example of a traffic sign image before and after grayscaling.
 
 As a last step, I normalized the image data because ...
 
-I decided to generate additional data because ... 
+I decided to generate additional data because ...
 
-To add more data to the the data set, I used the following techniques because ... 
+To add more data to the the data set, I used the following techniques because ...
 
 Here is an example of an original image and an augmented image:
 
 ![alt text][image3]
 
-The difference between the original data set and the augmented data set is the following ... 
+The difference between the original data set and the augmented data set is the following ...
 
 
 #### 2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
 
 My final model consisted of the following layers:
 
-| Layer         		|     Description	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| Input         		| 32x32x3 RGB image   							| 
+| Layer         		|     Description	        					|
+|:---------------------:|:---------------------------------------------:|
+| Input         		| 32x32x3 RGB image   							|
 | Convolution 3x3     	| 1x1 stride, same padding, outputs 32x32x64 	|
 | RELU					|												|
 | Max pooling	      	| 2x2 stride,  outputs 16x16x64 				|
@@ -95,7 +113,7 @@ My final model consisted of the following layers:
 | Softmax				| etc.        									|
 |						|												|
 |						|												|
- 
+
 
 
 #### 3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
@@ -106,7 +124,7 @@ To train the model, I used an ....
 
 My final model results were:
 * training set accuracy of ?
-* validation set accuracy of ? 
+* validation set accuracy of ?
 * test set accuracy of ?
 
 If an iterative approach was chosen:
@@ -120,7 +138,7 @@ If a well known architecture was chosen:
 * What architecture was chosen?
 * Why did you believe it would be relevant to the traffic sign application?
 * How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
- 
+
 
 ### Test a Model on New Images
 
@@ -128,7 +146,7 @@ If a well known architecture was chosen:
 
 Here are five German traffic signs that I found on the web:
 
-![alt text][image4] ![alt text][image5] ![alt text][image6] 
+![alt text][image4] ![alt text][image5] ![alt text][image6]
 ![alt text][image7] ![alt text][image8]
 
 The first image might be difficult to classify because ...
@@ -137,9 +155,9 @@ The first image might be difficult to classify because ...
 
 Here are the results of the prediction:
 
-| Image			        |     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| Stop Sign      		| Stop sign   									| 
+| Image			        |     Prediction	        					|
+|:---------------------:|:---------------------------------------------:|
+| Stop Sign      		| Stop sign   									|
 | U-turn     			| U-turn 										|
 | Yield					| Yield											|
 | 100 km/h	      		| Bumpy Road					 				|
@@ -154,18 +172,16 @@ The code for making predictions on my final model is located in the 11th cell of
 
 For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
 
-| Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| .60         			| Stop sign   									| 
+| Probability         	|     Prediction	        					|
+|:---------------------:|:---------------------------------------------:|
+| .60         			| Stop sign   									|
 | .20     				| U-turn 										|
 | .05					| Yield											|
 | .04	      			| Bumpy Road					 				|
 | .01				    | Slippery Road      							|
 
 
-For the second image ... 
+For the second image ...
 
 ### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
 #### 1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
-
-
