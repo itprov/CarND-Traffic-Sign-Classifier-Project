@@ -20,14 +20,16 @@ The goals / steps of this project are the following:
 [image1]: ./images/training_counts.png "Training Label Counts"
 [image2]: ./images/validation_counts.png "Validation Label Counts"
 [image3]: ./images/test_counts.png "Test Label Counts"
-[image4]: ./images/training_samples.png "Test Label Counts"
-[image5]: ./images/validation_samples.png "Test Label Counts"
-[image6]: ./images/test_samples.png "Test Label Counts"
-[image7]: ./examples/traffic1.jpg "Traffic Sign 1"
-[image8]: ./examples/traffic2.jpg "Traffic Sign 2"
-[image9]: ./examples/traffic3.jpg "Traffic Sign 3"
-[image10]: ./examples/traffic4.jpg "Traffic Sign 4"
-[image11]: ./examples/traffic5.jpg "Traffic Sign 5"
+[image4]: ./images/training_samples.png "Training Samples"
+[image5]: ./images/validation_samples.png "Validation Samples"
+[image6]: ./images/test_samples.png "Test Samples"
+[image7]: ./images/training_normalized_samples.png "Normalized Training Samples"
+[image8]: ./images/traffic1.jpg "Traffic Sign 1"
+[image9]: ./images/traffic2.jpg "Traffic Sign 2"
+[image10]: ./images/traffic3.jpg "Traffic Sign 3"
+[image11]: ./images/traffic4.jpg "Traffic Sign 4"
+[image12]: ./images/traffic5.jpg "Traffic Sign 5"
+[image13]: ./images/traffic6.jpg "Traffic Sign 6"
 
 ## Rubric Points
 ### Here I will consider the
@@ -88,34 +90,29 @@ reasonably good and takes much less processing time.
 
 The images look like this after normalizing.
 
-![alt text][image2]
-
-As a last step, I normalized the image data because ...
-
-I decided to generate additional data because ...
-
-To add more data to the the data set, I used the following techniques because ...
-
-Here is an example of an original image and an augmented image:
-
-![alt text][image3]
-
-The difference between the original data set and the augmented data set is the following ...
-
+![Normalized Training Samples][image7]
 
 #### 2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
 
-My final model consisted of the following layers:
+I have used the slightly higher level tf.layers API instead of tf.nn. My final model consists of the following layers:
 
 | Layer         		|     Description	        					|
 |:---------------------:|:---------------------------------------------:|
 | Input         		| 32x32x3 RGB image   							|
-| Convolution 3x3     	| 1x1 stride, same padding, outputs 32x32x64 	|
-| RELU					|												|
-| Max pooling	      	| 2x2 stride,  outputs 16x16x64 				|
-| Convolution 3x3	    | etc.      									|
-| Fully connected		| etc.        									|
-| Softmax				| etc.        									|
+| Convolution 5x5 + RELU| 1x1 stride, valid padding, outputs 28x28x16 	|
+| Max pooling  			| 2x2 pool, 2x2 stride,  outputs 14x14x16 		|
+| Convolution 5x5 + RELU| 1x1 stride, valid padding, outputs 10x10x32 	|
+| Max pooling  			| 2x2 pool, 1x1 stride,  outputs 9x9x32 		|
+| Convolution 3x3 + RELU| 1x1 stride, valid padding, outputs 7x7x64 	|
+| Max pooling  			| 2x2 pool, 1x1 stride,  outputs 6x6x64 		|
+| Convolution 3x3 + RELU| 1x1 stride, valid padding, outputs 4x4x128 	|
+| Max pooling  			| 2x2 pool, 1x1 stride,  outputs 3x3x128 		|
+| Flattened    			| outputs 768. 									|
+| Dropout      			| Dropout rate = 50%  							|
+| Fully connected		| outputs 256.        							|
+| Fully connected		| outputs 64.        							|
+| Dropout      			| Dropout rate = 50%  							|
+| Softmax				| outputs 43.        							|
 |						|												|
 |						|												|
 
@@ -123,38 +120,37 @@ My final model consisted of the following layers:
 
 #### 3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
 
-To train the model, I used an ....
+To train the model, I used the Adam optimizer to find the weights and bias corresponding to minimum loss. I kept most of the values such as β1, β2, same as default, but changed the learning rate α to 0.0009, with number of epochs = 30 and batch size = 100. 
+I experimented with various learning rate values such as 0.001, 0.002, 0.0015, etc., epochs = 10, 15, 30, etc., and batch size from 64 to 128 before finally selecting these values. 
 
 #### 4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
 My final model results were:
-* training set accuracy of ?
-* validation set accuracy of ?
+* training set accuracy of 100%
+* validation set accuracy of 98.7%
 * test set accuracy of ?
 
-If an iterative approach was chosen:
-* What was the first architecture that was tried and why was it chosen?
-* What were some problems with the initial architecture?
-* How was the architecture adjusted and why was it adjusted? Typical adjustments could include choosing a different model architecture, adding or taking away layers (pooling, dropout, convolution, etc), using an activation function or changing the activation function. One common justification for adjusting an architecture would be due to overfitting or underfitting. A high accuracy on the training set but low accuracy on the validation set indicates over fitting; a low accuracy on both sets indicates under fitting.
-* Which parameters were tuned? How were they adjusted and why?
-* What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
+Initially, I tried the LeNet architecture, but got lower than 90% validation set accuracy. Therefore, I experimented with various different architectures - dropout regularizations between various layers, convolutional and pooling layers, and different number of fully connected layers.
+Also, the simple normalization technique to just subtract 128 and divide the result by 128 resulted in poorer performace. Using max normalization from the sklearn library provided better results. 
 
-If a well known architecture was chosen:
-* What architecture was chosen?
-* Why did you believe it would be relevant to the traffic sign application?
-* How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
+* Parameters tuned:
+- Learning rate α 
+- Number of epochs
+- Batch size
+* How selected layers help achieve the outcome: Convolutional layers work well with this model because each layer detects features from the images that are useful in detecting the class of the image (traffic sign). As the number of filters is selected to be increasing from initial to final layers, the features detected include initially detected high level features such as presence of vertical / horizontal / slanted lines, to more specific features such as presence of numbers / shapes such as humans, vehicles in later layers. Dropout layers prevent overfitting as a certain percentage of neurons are randomly deactivated in every batch, so none of the neurons are relied upon excessively. 
 
+* The 1.3% difference between training and validation set accuracies indicates slight overfitting. More work is needed to reduce further reduce overfitting. 
 
 ### Test a Model on New Images
 
 #### 1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
 
-Here are five German traffic signs that I found on the web:
+Here are six German traffic signs that I found on the web:
 
-![alt text][image4] ![alt text][image5] ![alt text][image6]
-![alt text][image7] ![alt text][image8]
+![Right of way][image8] ![Slipper Road][image9] ![No entry][image10]
+![Right turn ahead][image11] ![Speed limit 30 km/h][image12] ![Stop Sign][image13]
 
-The first image might be difficult to classify because ...
+The first image might be difficult to classify because of the similarity of the sign with human form. The second image might also be difficult because of the  
 
 #### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
