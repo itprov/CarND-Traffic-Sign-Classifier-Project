@@ -23,7 +23,7 @@ The goals / steps of this project are the following:
 [image4]: ./images/training_samples.png "Training Samples"
 [image5]: ./images/validation_samples.png "Validation Samples"
 [image6]: ./images/test_samples.png "Test Samples"
-[image7]: ./images/training_normalized_samples.png "Normalized Training Samples"
+[image7]: ./images/training_quantile_transformed_samples.png "Normalized Training Samples"
 [image8]: ./images/traffic1.jpg "Traffic Sign 1"
 [image9]: ./images/traffic2.jpg "Traffic Sign 2"
 [image10]: ./images/traffic3.jpg "Traffic Sign 3"
@@ -81,12 +81,8 @@ in Training, Validation, and Test datasets
 
 #### 1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
 
-Initially, I tried the simple normalization technique (X - 128 / 128). After experimenting, I found that max normalization from the sklearn library provided better results. Thus I decided to use the sklearn.preprocessing.Normalizer class
-to normalize the data, to take advantage of the ready-made max norm function.
-I also experimented with other preprocessing functions from the sklearn library
-like StandardScaler, QuantileTransformer, and found that while
-QuantileTransformer gives slightly better model performance, Normalizer is
-reasonably good and takes much less processing time.
+Initially, I tried the simple normalization technique (X - 128 / 128). After experimenting, I found that normalizing / scaling API from the sklearn library provided better results. I experimented with various preprocessing classes from the sklearn library
+like Normalizer, StandardScaler, QuantileTransformer, and found that QuantileTransformer gives better model performance than all others, due to its ability to distribute the dataset uniformly.
 
 The images look like this after normalizing.
 
@@ -101,10 +97,13 @@ I have used the slightly higher level tf.layers API instead of tf.nn. My final m
 | Input         		| 32x32x3 RGB image   							|
 | Convolution 5x5 + RELU| 1x1 stride, valid padding, outputs 28x28x16 	|
 | Max pooling  			| 2x2 pool, 2x2 stride,  outputs 14x14x16 		|
+| Dropout      			| Dropout rate = 50%  							|
 | Convolution 5x5 + RELU| 1x1 stride, valid padding, outputs 10x10x32 	|
 | Max pooling  			| 2x2 pool, 1x1 stride,  outputs 9x9x32 		|
+| Dropout      			| Dropout rate = 50%  							|
 | Convolution 3x3 + RELU| 1x1 stride, valid padding, outputs 7x7x64 	|
 | Max pooling  			| 2x2 pool, 1x1 stride,  outputs 6x6x64 		|
+| Dropout      			| Dropout rate = 50%  							|
 | Convolution 3x3 + RELU| 1x1 stride, valid padding, outputs 4x4x128 	|
 | Max pooling  			| 2x2 pool, 1x1 stride,  outputs 3x3x128 		|
 | Flattened    			| outputs 768. 									|
@@ -114,32 +113,30 @@ I have used the slightly higher level tf.layers API instead of tf.nn. My final m
 | Dropout      			| Dropout rate = 50%  							|
 | Softmax				| outputs 43.        							|
 |						|												|
-|						|												|
 
 
 
 #### 3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
 
-To train the model, I used the Adam optimizer to find the weights and bias corresponding to minimum loss. I kept most of the values such as β1, β2, same as default, but changed the learning rate α to 0.001, with number of epochs = 30 and batch size = 100. 
-I experimented with various learning rate values such as 0.0009, 0.002, 0.0015, etc., epochs = 10, 15, 30, etc., and batch size from 64 to 128 before finally selecting these values. 
+To train the model, I used the Adam optimizer to find the weights and bias corresponding to minimum loss. I kept the values such as β1, β2, etc. same as default, but experimented with various learning rate α, such as 0.0009, 0.001, 0.002, 0.0015, etc.. I also experimented with various values of epochs = 10, 15, 19, 20, 30, etc., and batch size = 64, 80, 100, 128, etc. 
 
 #### 4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
 My final model results were:
-* training set accuracy of 99.7%
-* validation set accuracy of 97%
-* test set accuracy of 94.3%
+* training set accuracy of 99.9%
+* validation set accuracy of 97.8% (at epoch = 28)
+* test set accuracy of 94.8%
 
-Initially, I tried the LeNet architecture, but got only up to 92% validation set accuracy. Therefore, I started experimenting by adding more convolutional & pooling layers and changing the number of filters, kernel size, pool size, and strides. The results varied between 95% and 98.7% of validation set accuracy, with training data set accuracy ~5% higher than validation data set accuracy. Therefore, I experimented with adding few dropout regularization layers to reduce overfitting. The result was reduction of the difference between training and validation data set accuracies. 
+Initially, I tried the LeNet architecture, but got only up to 92% validation set accuracy. Therefore, I started experimenting by adding more convolutional & pooling layers and changing the number of filters, kernel size, pool size, and strides. One architecture did give me 98.7% of validation set accuracy, but its performance on the New Images was poorer than the final model. Also, the training data set accuracy was ~5% higher than validation data set accuracy. Therefore, I experimented with adding few dropout regularization layers to reduce overfitting. The result was reduction of the difference between training and validation data set accuracies. 
 
 However, still there is a difference of ~3% between training and validation data set accuracies, so more work is needed to reduce further reduce overfitting. Augmenting the data set with images synthesized from the existing training data set will help. 
 
-* Parameters tuned:
-- Learning rate α - tried 0.0009, 0.0015, 0.002, before settling on 0.001 
-- Number of epochs - tried 10, 15, 20 before settling on 30
-- Batch size - tried 128, 80, 64, before settling on 100
+Parameters tuned:
+* Learning rate α - tried 0.0009, 0.0015, 0.002, before settling on 0.001 
+* Number of epochs - tried 10, 15, 20, before settling on 30
+* Batch size - tried 128, 80, 64, before settling on 100
 
-* How selected layers help achieve the outcome: Convolutional layers work well with this model because each layer detects features from the images that are useful in detecting the class of the image (traffic sign). As the number of filters is selected to be increasing from initial to final layers, the features detected include initially detected high level features such as presence of vertical / horizontal / slanted lines, to more specific features such as presence of numbers / shapes such as humans, vehicles in later layers. Dropout layers prevent overfitting as a certain percentage of neurons are randomly deactivated in every batch, so none of the neurons are relied upon excessively. 
+How selected layers help achieve the outcome: Convolutional layers work well with this model because each layer detects features from the images that are useful in detecting the class of the image (traffic sign). As the number of filters is selected to be increasing from initial to final layers, the features detected include initially detected high level features such as presence of vertical / horizontal / slanted lines, to more specific features such as presence of numbers / shapes such as humans, vehicles in later layers. Dropout layers prevent overfitting as a certain percentage of neurons are randomly deactivated in every batch, so none of the neurons are relied upon excessively. 
 
 ### Test a Model on New Images
 
@@ -147,10 +144,15 @@ However, still there is a difference of ~3% between training and validation data
 
 Here are six German traffic signs that I found on the web:
 
-![Right-of-way at the next intersection][image8] ![Slippery Road][image9] ![No entry][image10]
-![Right turn ahead][image11] ![Speed limit 30 km/h][image12] ![Stop Sign][image13]
+<img src="./images/traffic1.jpg" alt="Right-of-way at the next intersection" width="480">
+<img src="./images/traffic2.jpg" alt="Slippery Road" width="480">
+<img src="./images/traffic3.jpg" alt="No entry" width="480">
+<img src="./images/traffic4.jpg" alt="Right turn ahead" width="480">
+<img src="./images/traffic5.jpg" alt="Speed limit (30km/h)" width="480">
+<img src="./images/traffic6.jpg" alt="Stop" width="480">
 
-I resized them to 32x32 
+I resized them to 32x32 and preprocessed them with the same normalizer. 
+
 Qualities that might be difficult to classify for these images:
 * First image: similarity of the sign with human form. 
 * Second image: curvy lines that could be difficult to detect. Also, relatively lower number of training samples. 
@@ -174,68 +176,63 @@ The model was able to correctly all of the 6 traffic signs, which gives an accur
 
 #### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
-The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
+The code for making predictions on my final model is located under the heading "Predict the Sign Type for Each Image" in the Jupyter notebook.
 
-For the first image, the model is 100% sure that this is a "Right-of-way at next intersection" sign (probability of 1.0), and the image does contain a Right-of-way sign. The top five soft max probabilities were:
+For each image, the model is close to 100% sure (probability of 1.0) of the predicted class, as indicated in the table above. The top five soft max probabilities for each image were:
 
+Image 1:
 | Probability         	|     Prediction	        					|
 |:---------------------:|:---------------------------------------------:|
 | 1.0         			| Right-of-way at next intersection				|
-| ~.0     				| Pedestrians 									|
-| ~.0					| Ahead only 									|
-| ~.0	      			| Roundabout mandatory			 				|
+| ~.0     				| Speed limit (100km/h)							|
+| ~.0					| Pedestrians 									|
+| ~.0	      			| End of speed limit (80km/h)	 				|
 | ~.0				    | Speed limit (30km/h)   						|
 
-
-For the second image, the model is relatively sure that this is a Slippery road (probability of ~0.61), and the image does contain a Slippery road. The top five soft max probabilities were:
-
+Image 2:
 | Probability         	|     Prediction	        					|
 |:---------------------:|:---------------------------------------------:|
-| .61         			| Slippery road 								|
-| .39     				| Dangerous curve to the left 					|
-| ~.0					| Road narrows on the right						|
-| ~.0	      			| Bicycles crossing				 				|
-| ~.0				    | Pedestrians      								|
+| 1.0         			| Slippery road 								|
+| ~.0     				| No passing 									|
+| ~.0					| Dangerous curve to the left					|
+| ~.0	      			| Children crossing				 				|
+| ~.0				    | Bicycles crossing 							|
 
-For the third image, the model is 100% sure that this is a No entry sign (probability of 1.0), and the image does contain a Right-of-way sign. The top five soft max probabilities were:
-
+Image 3:
 | Probability         	|     Prediction	        					|
 |:---------------------:|:---------------------------------------------:|
 | 1.0         			| No entry   									|
-| ~.0     				| No passing 									|
-| ~.0					| No passing for vehicles over 3.5 metric tons	|
-| ~.0	      			| Stop								 			|
-| ~.0				    | Bicycles crossing 							|
+| ~.0     				| Ahead only									|
+| ~.0					| Traffic signals								|
+| ~.0	      			| End of no passing					 			|
+| ~.0				    | Road work 									|
 
-For the fourth image, the model is very sure that this is a Right turn ahead sign (probability of ~0.93), and the image does contain a Right turn ahead sign. The top five soft max probabilities were:
-
+Image 4:
 | Probability         	|     Prediction	        					|
 |:---------------------:|:---------------------------------------------:|
-| .93         			| Right turn ahead   							|
-| .07     				| Ahead only 									|
-| ~.0					| Keep left 									|
-| ~.0	      			| Roundabout mandatory				 			|
-| ~.0				    | Speed limit (60km/h)							|
+| ~1.0         			| Right turn ahead   							|
+| ~.0     				| Keep right									|
+| ~.0					| Ahead only 									|
+| ~.0	      			| Roundabout mandatory			 				|
+| ~.0				    | Keep left    	 	 							|
 
-For the fifth image, the model is 100% sure that this is a Speed limit (30km/h) sign (probability of 1.0), and the image does contain a Speed limit (30km/h) sign. The top five soft max probabilities were:
-
+Image 5:
 | Probability         	|     Prediction	        					|
 |:---------------------:|:---------------------------------------------:|
 | 1.0         			| Speed limit (30km/h)   						|
-| ~.0     				| Speed limit (20km/h)							|
-| ~.0					| Speed limit (120km/h)							|
+| ~.0     				| Speed limit (60km/h)							|
+| ~.0					| Speed limit (20km/h)							|
 | ~.0	      			| Speed limit (50km/h)				 			|
-| ~.0				    | Speed limit (80km/h)							|
+| ~.0				    | Roundabout mandatory							|
 
-For the sixth image, the model is almost 100% sure that this is a Stop sign (probability of ~1.0), and the image does contain a Stop sign. The top five soft max probabilities were:
-
+Image 6:
 | Probability         	|     Prediction	        					|
 |:---------------------:|:---------------------------------------------:|
 | 1.0         			| Stop sign   									|
-| ~.0     				| Yield 										|
-| ~.0					| No entry										|
-| ~.0	      			| No vehicles					 				|
-| ~.0				    | No passing for vehicles over 3.5 metric tons	|
+| ~.0     				| No entry										|
+| ~.0					| Speed limit (20km/h)							|
+| ~.0	      			| Speed limit (60km/h)			 				|
+| ~.0				    | Right-of-way at the next intersection			|
 
 ### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
 #### 1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
