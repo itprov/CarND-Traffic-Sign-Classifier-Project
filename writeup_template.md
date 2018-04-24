@@ -211,6 +211,7 @@ Image 3:
 | ~.0					| Road work 									|
 
 Image 4:
+
 | Probability         	|     Prediction	        					|
 |:---------------------:|:---------------------------------------------:|
 | ~1.0         			| Right turn ahead   							|
@@ -220,6 +221,7 @@ Image 4:
 | ~.0					| Keep left    	 	 							|
 
 Image 5:
+
 | Probability         	|     Prediction	        					|
 |:---------------------:|:---------------------------------------------:|
 | 1.0         			| Speed limit (30km/h)   						|
@@ -229,6 +231,7 @@ Image 5:
 | ~.0					| Roundabout mandatory 							|
 
 Image 6:
+
 | Probability         	|     Prediction	        					|
 |:---------------------:|:---------------------------------------------:|
 | 1.0         			| Stop sign   									|
