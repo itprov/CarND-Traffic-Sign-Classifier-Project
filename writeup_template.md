@@ -118,7 +118,7 @@ I have used the slightly higher level tf.layers API instead of tf.nn. My final m
 
 #### 3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
 
-To train the model, I used the Adam optimizer to find the weights and bias corresponding to minimum loss. I kept the values such as β1, β2, etc. same as default, but experimented with various learning rate α, such as 0.0009, 0.001, 0.002, 0.0015, etc.. I also experimented with various values of epochs = 10, 15, 19, 20, 30, etc., and batch size = 64, 80, 100, 128, etc. 
+To train the model, I used the Adam optimizer to find the weights and bias corresponding to minimum loss. I kept the values such as β1, β2, etc. same as default, but experimented with various learning rate α, such as 0.0009, 0.001, 0.002, 0.0015, etc.. I also experimented with various values of epochs = 10, 15, 20, 30, etc., and batch size = 64, 80, 100, 128, etc. 
 
 #### 4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
@@ -151,7 +151,7 @@ Here are six German traffic signs that I found on the web:
 <img src="./images/traffic5.jpg" alt="Speed limit (30km/h)" width="480">
 <img src="./images/traffic6.jpg" alt="Stop" width="480">
 
-I resized them to 32x32 and preprocessed them with the same normalizer. 
+I resized them to 32x32 and preprocessed them with the same quantile transformer. 
 
 Qualities that might be difficult to classify for these images:
 * First image: similarity of the sign with human form. 
@@ -172,7 +172,7 @@ Here are the results of the prediction:
 | Stop Sign 			| Stop Sign   		 							|
 
 
-The model was able to correctly all of the 6 traffic signs, which gives an accuracy of 100%. This compares favorably to the accuracy on the test set of ...
+The model was able to correctly identify all of the 6 traffic signs, which gives an accuracy of 100%. This compares favorably to the accuracy on the test set of 94.8%. 
 
 #### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
@@ -186,8 +186,8 @@ Image 1:
 | 1.0         			| Right-of-way at next intersection				|
 | ~.0     				| Speed limit (100km/h)							|
 | ~.0					| Pedestrians 									|
-| ~.0	      			| End of speed limit (80km/h)	 				|
-| ~.0				    | Speed limit (30km/h)   						|
+| ~.0					| End of speed limit (80km/h)	 				|
+| ~.0					| Speed limit (30km/h)   						|
 
 Image 2:
 | Probability         	|     Prediction	        					|
@@ -195,8 +195,8 @@ Image 2:
 | 1.0         			| Slippery road 								|
 | ~.0     				| No passing 									|
 | ~.0					| Dangerous curve to the left					|
-| ~.0	      			| Children crossing				 				|
-| ~.0				    | Bicycles crossing 							|
+| ~.0					| Children crossing				 				|
+| ~.0					| Bicycles crossing 							|
 
 Image 3:
 | Probability         	|     Prediction	        					|
@@ -204,8 +204,8 @@ Image 3:
 | 1.0         			| No entry   									|
 | ~.0     				| Ahead only									|
 | ~.0					| Traffic signals								|
-| ~.0	      			| End of no passing					 			|
-| ~.0				    | Road work 									|
+| ~.0					| End of no passing					 			|
+| ~.0					| Road work 									|
 
 Image 4:
 | Probability         	|     Prediction	        					|
@@ -213,17 +213,17 @@ Image 4:
 | ~1.0         			| Right turn ahead   							|
 | ~.0     				| Keep right									|
 | ~.0					| Ahead only 									|
-| ~.0	      			| Roundabout mandatory			 				|
-| ~.0				    | Keep left    	 	 							|
+| ~.0					| Roundabout mandatory			 				|
+| ~.0					| Keep left    	 	 							|
 
 Image 5:
 | Probability         	|     Prediction	        					|
 |:---------------------:|:---------------------------------------------:|
 | 1.0         			| Speed limit (30km/h)   						|
-| ~.0     				| Speed limit (60km/h)							|
-| ~.0					| Speed limit (20km/h)							|
-| ~.0	      			| Speed limit (50km/h)				 			|
-| ~.0				    | Roundabout mandatory							|
+| ~.0     				| Speed limit (60km/h) 							|
+| ~.0					| Speed limit (20km/h) 							|
+| ~.0					| Speed limit (50km/h) 				 			|
+| ~.0					| Roundabout mandatory 							|
 
 Image 6:
 | Probability         	|     Prediction	        					|
@@ -231,8 +231,9 @@ Image 6:
 | 1.0         			| Stop sign   									|
 | ~.0     				| No entry										|
 | ~.0					| Speed limit (20km/h)							|
-| ~.0	      			| Speed limit (60km/h)			 				|
-| ~.0				    | Right-of-way at the next intersection			|
+| ~.0					| Speed limit (60km/h)			 				|
+| ~.0					| Right-of-way at the next intersection			|
+
 
 ### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
 #### 1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
