@@ -181,6 +181,7 @@ The code for making predictions on my final model is located under the heading "
 For each image, the model is close to 100% sure (probability of 1.0) of the predicted class, as indicated in the table above. The top five soft max probabilities for each image were:
 
 Image 1:
+
 | Probability         	|     Prediction	        					|
 |:---------------------:|:---------------------------------------------:|
 | 1.0         			| Right-of-way at next intersection				|
@@ -190,6 +191,7 @@ Image 1:
 | ~.0					| Speed limit (30km/h)   						|
 
 Image 2:
+
 | Probability         	|     Prediction	        					|
 |:---------------------:|:---------------------------------------------:|
 | 1.0         			| Slippery road 								|
@@ -199,6 +201,7 @@ Image 2:
 | ~.0					| Bicycles crossing 							|
 
 Image 3:
+
 | Probability         	|     Prediction	        					|
 |:---------------------:|:---------------------------------------------:|
 | 1.0         			| No entry   									|
