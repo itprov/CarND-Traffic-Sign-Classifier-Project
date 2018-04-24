@@ -162,14 +162,14 @@ Qualities that might be difficult to classify for these images:
 
 Here are the results of the prediction:
 
-| Image			        |     Prediction	        					|
-|:---------------------:|:---------------------------------------------:|
-| Right-of-way   		| Right-of-way   								|
-| Slippery road  		| Slippery road  								|
-| No entry      		| No entry 										|
-| Right turn ahead 		| Right turn ahead 				 				|
-| 30 km/h       		| 30 km/h  						 				|
-| Stop Sign 			| Stop Sign   		 							|
+| Image			                        |     Prediction	        				|
+|:-------------------------------------:|:-----------------------------------------:|
+| Right-of-way at the next intersection | Right-of-way at the next intersection		|
+| Slippery road  						| Slippery road  							|
+| No entry       						| No entry 									|
+| Right turn ahead  					| Right turn ahead 				 			|
+| 30 km/h        						| 30 km/h  						 			|
+| Stop Sign     						| Stop Sign   		 						|
 
 
 The model was able to correctly identify all of the 6 traffic signs, which gives an accuracy of 100%. This compares favorably to the accuracy on the test set of 94.8%. 
@@ -184,7 +184,7 @@ Image 1:
 
 | Probability         	|     Prediction	        					|
 |:---------------------:|:---------------------------------------------:|
-| 1.0         			| Right-of-way at next intersection				|
+| 1.0         			| Right-of-way at the next intersection			|
 | ~.0     				| Speed limit (100km/h)							|
 | ~.0					| Pedestrians 									|
 | ~.0					| End of speed limit (80km/h)	 				|
